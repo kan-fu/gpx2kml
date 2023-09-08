@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx
+  version="1.1"
+  creator="Runkeeper - http://www.runkeeper.com"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.topografix.com/GPX/1/1"
+  xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd"
+  xmlns:gpxtpx="http://www.garmin.com/xmlschemas/TrackPointExtension/v1">
+<trk>
+  <name><![CDATA[Walking 8/3/23 12:12 pm]]></name>
+  <time>2023-08-03T19:12:38Z</time>
+<trkseg>
+<trkpt lat="38.303185000" lon="-123.064900000"><ele>17.0</ele><time>2023-08-03T19:12:38Z</time></trkpt>
+<trkpt lat="38.303160000" lon="-123.064896000"><ele>17.4</ele><time>2023-08-03T19:12:50Z</time></trkpt>
+<trkpt lat="38.303196000" lon="-123.065010000"><ele>17.8</ele><time>2023-08-03T19:14:00Z</time></trkpt>
+<trkpt lat="38.303290000" lon="-123.064980000"><ele>17.8</ele><time>2023-08-03T19:15:00Z</time></trkpt>
+<trkpt lat="38.303380000" lon="-123.064960000"><ele>17.8</ele><time>2023-08-03T19:15:12Z</time></trkpt>
+<trkpt lat="38.303307000" lon="-123.064880000"><ele>18.1</ele><time>2023-08-03T19:17:10Z</time></trkpt>
+<trkpt lat="38.303368000" lon="-123.064780000"><ele>18.8</ele><time>2023-08-03T19:17:52Z</time></trkpt>
+</trkseg>
+<trkseg>
+<trkpt lat="38.305190000" lon="-123.057720000"><ele>5.2</ele><time>2023-08-03T19:36:49Z</time></trkpt>
+<trkpt lat="38.305134000" lon="-123.057670000"><ele>5.0</ele><time>2023-08-03T19:37:07Z</time></trkpt>
+<trkpt lat="38.305115000" lon="-123.057550000"><ele>4.9</ele><time>2023-08-03T19:37:37Z</time></trkpt>
+<trkpt lat="38.305042000" lon="-123.057480000"><ele>4.8</ele><time>2023-08-03T19:37:54Z</time></trkpt>
+<trkpt lat="38.304943000" lon="-123.057450000"><ele>4.6</ele><time>2023-08-03T19:38:10Z</time></trkpt>
+<trkpt lat="38.304870000" lon="-123.057380000"><ele>4.5</ele><time>2023-08-03T19:38:23Z</time></trkpt>
+<trkpt lat="38.304787000" lon="-123.057330000"><ele>4.2</ele><time>2023-08-03T19:41:10Z</time></trkpt>
+<trkpt lat="38.304690000" lon="-123.057335000"><ele>3.9</ele><time>2023-08-03T19:43:20Z</time></trkpt>
+</trkseg>
+</trk>
+</gpx>

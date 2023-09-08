@@ -1,2 +1,2 @@
 # gpx2kml
-A python library to convert gpx files exported from Runkeeper to kml. 
+This is a library to combine gpx files exported from runkeeper.com to kml files.
