@@ -36,7 +36,7 @@ class GPX:
 
     def add_meta(self, meta_info: dict[str, str]):
         """
-        Add the desc and type tag under trk tag
+        Add the desc and type tag under trk tag. Works only when the gpx does not have desc and type tag.
         """
         desc_tag = ET.Element("desc")
         desc_tag.text = meta_info["desc"]

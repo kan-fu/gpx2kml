@@ -1,14 +1,16 @@
 import csv
 import itertools as it
+import tempfile
 from pathlib import Path
 from textwrap import dedent
 from typing import Iterator
+from zipfile import ZipFile
 
 from gpx2kml.gpx import GPX
 from gpx2kml.kml import KML
 
 
-def _extract_from_csv(csv_file: Path) -> dict[str, dict[str, str]]:
+def _extract_from_csv(csv_file: Path | str) -> dict[str, dict[str, str]]:
     meta_info: dict[str, dict[str, str]] = {}
 
     with open(csv_file, mode="r", encoding="utf8") as f:
@@ -29,6 +31,13 @@ def _extract_from_csv(csv_file: Path) -> dict[str, dict[str, str]]:
                 Speed:      {row[7]} km/h"""
             )
     return meta_info
+
+
+def gpx_archive_with_zipfile(gpx_zip_file: str, archive_folder=r"./archive"):
+    with tempfile.TemporaryDirectory() as tempdir:
+        with ZipFile(gpx_zip_file) as myzip:
+            myzip.extractall(tempdir)
+        gpx_archive(tempdir, archive_folder)
 
 
 def gpx_archive(gpx_folder=r"./gpx", archive_folder=r"./archive"):
@@ -69,11 +78,13 @@ def kml_generate(archive_folder=r"./archive", kml_folder=r"./kml"):
         kml.export()
 
 
-def kml_combine(kml_combine_name: str, kml_folder=r"./kml"):
-    kml = KML(Path(".") / f"{kml_combine_name}.kml", mode="new")
+def kml_combine(kml_combine_name: str, from_folder=r"./kml", to_folder="."):
+    Path(to_folder).mkdir(exist_ok=True)
+
+    kml = KML(Path(to_folder) / f"{kml_combine_name}.kml", mode="new")
     kml.add_folder()
     for year, kml_sublist in it.groupby(
-        Path(kml_folder).glob("*.kml"), key=lambda path: path.name[:4]
+        Path(from_folder).glob("*.kml"), key=lambda path: path.name[:4]
     ):
         print(f"Combing year {year}")
 
