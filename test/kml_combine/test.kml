@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+	<Folder>
+		<name>test</name>
+		<Folder>
+			<name>2023</name>
+			<Document>
+				<name>2023-08</name>
+				<Style id="Cycling">
+					<LineStyle>
+						<color>ff0000ff</color>
+						<width>3</width>
+					</LineStyle>
+				</Style>
+				<Style id="Walking">
+					<LineStyle>
+						<color>ff00ff00</color>
+						<width>2</width>
+					</LineStyle>
+				</Style>
+				<Style id="Running">
+					<LineStyle>
+						<color>ff0000ff</color>
+						<width>2</width>
+					</LineStyle>
+				</Style>
+				<Style id="Other">
+					<LineStyle>
+						<color>ffff0000</color>
+						<width>3</width>
+					</LineStyle>
+				</Style>
+				<Placemark>
+					<name>Walking 8/3/23 12:12 pm</name>
+					<description>
+			Type:       Walking
+			Notes:      
+			Distance:   0.68 km
+			Duration:   41:54
+			Pace:       62:04 min/km
+			Speed:      0.97 km/h</description>
+					<styleUrl>#Walking</styleUrl>
+					<MultiGeometry>
+						<LineString>
+							<coordinates>-123.064900000,38.303185000,0 -123.064896000,38.303160000,0 -123.065010000,38.303196000,0 -123.064980000,38.303290000,0 -123.064960000,38.303380000,0 -123.064880000,38.303307000,0 -123.064780000,38.303368000,0</coordinates>
+						</LineString>
+						<LineString>
+							<coordinates>-123.057720000,38.305190000,0 -123.057670000,38.305134000,0 -123.057550000,38.305115000,0 -123.057480000,38.305042000,0 -123.057450000,38.304943000,0 -123.057380000,38.304870000,0 -123.057330000,38.304787000,0 -123.057335000,38.304690000,0</coordinates>
+						</LineString>
+					</MultiGeometry>
+				</Placemark>
+			</Document>
+		</Folder>
+	</Folder>
+</kml>
