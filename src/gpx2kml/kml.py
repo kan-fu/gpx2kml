@@ -25,7 +25,7 @@ class KML:
             assert kml_path.exists()
             self.root = ET.parse(kml_path).getroot()
         else:
-            raise Exception("mode is unknown")
+            raise ValueError("mode is unknown")
 
     def get_document_ele(self):
         return self.root.find("ns:Document", KML.__ns) or self.root.find("Document")
