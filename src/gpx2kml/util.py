@@ -1,5 +1,6 @@
 import csv
 import itertools as it
+import sys
 import tempfile
 from pathlib import Path
 from textwrap import dedent
@@ -33,14 +34,14 @@ def _extract_from_csv(csv_file: Path | str) -> dict[str, dict[str, str]]:
     return meta_info
 
 
-def gpx_archive_with_zipfile(gpx_zip_file: str, archive_folder=r"./archive"):
+def gpx_archive_with_zipfile(gpx_zip_file: str | Path, archive_folder=r"./archive"):
     with tempfile.TemporaryDirectory() as tempdir:
         with ZipFile(gpx_zip_file) as myzip:
             myzip.extractall(tempdir)
         gpx_archive(tempdir, archive_folder)
 
 
-def gpx_archive(gpx_folder=r"./gpx", archive_folder=r"./archive"):
+def gpx_archive(gpx_folder: Path | str = r"./gpx", archive_folder=r"./archive"):
     Path(archive_folder).mkdir(exist_ok=True)
     meta_info = _extract_from_csv(Path(gpx_folder) / "cardioActivities.csv")
 
@@ -90,3 +91,34 @@ def kml_combine(kml_combine_name: str, from_folder=r"./kml", to_folder="."):
 
         kml.add_sub_folder(year, kml_sublist)
     kml.export()
+
+
+def gpx_archive_cmd():
+    args = sys.argv[1:]
+    if len(args) == 0:  # By default, it will process all the zip files
+        for gpx_zip_file in Path(".").glob("01-runkeeper-data-export*.zip"):
+            print(f"*** Processing {gpx_zip_file} ***")
+            gpx_archive_with_zipfile(gpx_zip_file)
+    elif len(args) == 1:
+        filename = args[0]
+        assert Path(filename).exists(), f"The filename '{filename}' should exist!"
+        print(f"*** Processing {filename} ***")
+        gpx_archive_with_zipfile(filename)
+    else:
+        print("gpx-archive only supports zero or one argument!")
+
+
+def kml_generate_cmd():
+    args = sys.argv[1:]
+    assert len(args) == 0, "kml-gen should not take any arguments!"
+    kml_generate()
+
+
+def kml_combine_cmd():
+    args = sys.argv[1:]
+    if len(args) == 0:
+        print("Please input the name of the combined file!")
+    elif len(args) == 1:
+        kml_combine(args[0])
+    else:
+        print("kml-combine only supports one argument!")
