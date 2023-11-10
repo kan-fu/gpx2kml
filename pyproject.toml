@@ -31,3 +31,7 @@ testpaths =  "test"
 profile = "black"
 src_paths = ["src", "test"]
 
+[project.scripts]
+gpx-archive = "gpx2kml.util:gpx_archive_cmd"
+kml-gen = "gpx2kml.util:kml_generate_cmd"
+kml-combine = "gpx2kml.util:kml_combine_cmd"

@@ -164,3 +164,4 @@ demo/archive/
 demo/kml/
 demo/*.kml
 
+.vscode
