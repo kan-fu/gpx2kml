@@ -62,7 +62,7 @@ def kml_generate(archive_folder=r"./archive", kml_folder=r"./kml"):
     gpx_sublist: Iterator[Path]
     # GPX filename is like 2015-09-12-183914.gpx, 0 to 7 is 2015-09
     for year_month, gpx_sublist in it.groupby(
-        Path(archive_folder).glob("*.gpx"), key=lambda path: path.name[:7]
+        sorted(Path(archive_folder).glob("*.gpx")), key=lambda path: path.name[:7]
     ):
         print(f"Generating {year_month}.kml")
         kml = KML(Path(kml_folder) / f"{year_month}.kml", mode="new")
