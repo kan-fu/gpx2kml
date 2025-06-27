@@ -16,17 +16,20 @@ def test_gpx_archive_with_zip(tmp_path):
     gpx_archive_with_zipfile(
         gpx_zip_file="test/01-runkeeper-data-export.zip", archive_folder=tmp_path
     )
-    assert filecmp.dircmp(tmp_path, "test/archive")
+    dcmp = filecmp.dircmp(tmp_path, "test/archive")
+    assert not dcmp.diff_files and not dcmp.left_only and not dcmp.right_only
 
 
 def test_gpx_archive(tmp_path):
     gpx_archive(gpx_folder="test/gpx", archive_folder=tmp_path)
-    assert filecmp.dircmp(tmp_path, "test/archive")
+    dcmp = filecmp.dircmp(tmp_path, "test/archive")
+    assert not dcmp.diff_files and not dcmp.left_only and not dcmp.right_only
 
 
 def test_kml_generate(tmp_path):
     kml_generate(archive_folder=r"test/archive", kml_folder=tmp_path)
-    assert filecmp.dircmp(tmp_path, "test/kml")
+    dcmp = filecmp.dircmp(tmp_path, "test/kml")
+    assert not dcmp.diff_files and not dcmp.left_only  # dcmp.right_only is not needed
 
 
 def test_kml_combine(tmp_path):

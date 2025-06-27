@@ -29,7 +29,8 @@ gpx-archive
 ```commandline
 kml-gen
 ```
-6. Run `kml-combine XXX` in the terminal. This will create a `XXX.kml`` file that includes all the kml files in the kml folder.
+6. Move the kml in the kml/XXX folder, and run `kml-combine XXX` in the terminal.
+This will create a `XXX.kml`` file that includes all the kml files in the kml/XXX folder.
 ```commandline
 kml-combine XXX
 ```

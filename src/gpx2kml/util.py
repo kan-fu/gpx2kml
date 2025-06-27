@@ -85,7 +85,8 @@ def kml_combine(kml_combine_name: str, from_folder=r"./kml", to_folder="."):
     kml = KML(Path(to_folder) / f"{kml_combine_name}.kml", mode="new")
     kml.add_folder()
     for year, kml_sublist in it.groupby(
-        Path(from_folder).glob("*.kml"), key=lambda path: path.name[:4]
+        (Path(from_folder) / kml_combine_name).glob("*.kml"),
+        key=lambda path: path.name[:4],
     ):
         print(f"Combing year {year}")
 
