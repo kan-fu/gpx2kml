@@ -29,6 +29,11 @@ gpx-archive
 ```commandline
 kml-gen
 ```
+
+Alternatively, kml-gen can take an argument for filtering the type of gpx files, for example to only generate kml from "Cycling" gpx files,
+```commandline
+kml-gen Cycling
+```
 6. Move the kml in the kml/XXX folder, and run `kml-combine XXX` in the terminal.
 This will create a `XXX.kml`` file that includes all the kml files in the kml/XXX folder.
 ```commandline

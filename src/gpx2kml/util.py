@@ -50,12 +50,11 @@ def gpx_archive(gpx_folder: Path | str = r"./gpx", archive_folder=r"./archive"):
         gpx = GPX(gpx_path)
         gpx.add_meta(meta_info[gpx_path.name])
         gpx.export(Path(archive_folder) / gpx_path.name)
-    #     os.remove(gpx_path)
-    # os.remove(Path(gpx_folder) / "cardioActivities.csv")
-    # os.remove(Path(gpx_folder) / "measurements.csv")
 
 
-def kml_generate(archive_folder=r"./archive", kml_folder=r"./kml"):
+def kml_generate(
+    archive_folder=r"./archive", kml_folder=r"./kml", filter_type: str | None = None
+):
     Path(kml_folder).mkdir(exist_ok=True)
 
     year_month: str
@@ -75,7 +74,10 @@ def kml_generate(archive_folder=r"./archive", kml_folder=r"./kml"):
         ]
         for style_id, color, width in styles:
             kml.add_style_to_document(style_id, color, width)
-        kml.add_gpx_files_to_document(gpx_sublist)
+        for gpx_file in gpx_sublist:
+            if filter_type and GPX(gpx_file).get_type() != filter_type:
+                continue
+            kml.add_gpx_file_to_document(gpx_file)
         kml.export()
 
 
@@ -111,8 +113,13 @@ def gpx_archive_cmd():
 
 def kml_generate_cmd():
     args = sys.argv[1:]
-    assert len(args) == 0, "kml-gen should not take any arguments!"
-    kml_generate()
+    if len(args) == 0:
+        kml_generate()
+    elif len(args) == 1:
+        filter_type = args[0]
+        kml_generate(filter_type=filter_type)
+    else:
+        print("kml-gen only supports zero or one argument!")
 
 
 def kml_combine_cmd():

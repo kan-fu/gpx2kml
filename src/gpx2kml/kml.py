@@ -46,6 +46,9 @@ class KML:
         for gpx_path in gpx_paths:
             self._add_placemark_to_document(gpx_path)
 
+    def add_gpx_file_to_document(self, gpx_path: Path):
+        self._add_placemark_to_document(gpx_path)
+
     def _add_sub_folder_to_folder(self, sub_folder):
         self.get_folder_ele().append(sub_folder)
 
