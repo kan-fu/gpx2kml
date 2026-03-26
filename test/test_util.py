@@ -41,14 +41,12 @@ def test_extract_from_csv():
     assert _extract_from_csv("test/gpx/cardioActivities.csv") == {
         "2023-08-03-121238.gpx": {
             "type": "Walking",
-            "desc": dedent(
-                """\
+            "desc": dedent("""\
                 Type:       Walking
                 Notes:      
                 Distance:   0.68 km
                 Duration:   41:54
                 Pace:       62:04 min/km
-                Speed:      0.97 km/h"""  # noqa: W291
-            ),
+                Speed:      0.97 km/h"""),  # noqa: W291
         }
     }

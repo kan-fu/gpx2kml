@@ -27,15 +27,13 @@ def test_unarchived_get_info(unarchived_gpx):
 def test_archived_get_info(archived_gpx):
     assert archived_gpx.get_type() == "Walking"
     assert archived_gpx.get_name() == "Walking 8/3/23 12:12 pm"
-    assert archived_gpx.get_desc() == dedent(
-        """\
+    assert archived_gpx.get_desc() == dedent("""\
         Type:       Walking
         Notes:      
         Distance:   0.68 km
         Duration:   41:54
         Pace:       62:04 min/km
-        Speed:      0.97 km/h"""  # noqa: W291
-    )
+        Speed:      0.97 km/h""")  # noqa: W291
 
 
 def test_unarchived_add_meta(unarchived_gpx, tmp_path):

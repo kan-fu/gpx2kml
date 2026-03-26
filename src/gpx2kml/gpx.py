@@ -50,7 +50,11 @@ class GPX:
         trk.insert(1, type_tag)
 
     def extract_latlon(self) -> Iterator[list[tuple[str, str]]]:
-        for trkseg in self.root[0].findall("ns:trkseg", GPX.__ns):
+        trk = self.root.find("ns:trk", GPX.__ns)
+        if trk is None:
+            return
+
+        for trkseg in trk.findall("ns:trkseg", GPX.__ns):
             seg_coords = []
             for trkpt in trkseg.findall("ns:trkpt", GPX.__ns):
                 seg_coords.append((trkpt.attrib["lat"], trkpt.attrib["lon"]))

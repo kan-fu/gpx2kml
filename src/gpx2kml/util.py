@@ -10,27 +10,51 @@ from zipfile import ZipFile
 from gpx2kml.gpx import GPX
 from gpx2kml.kml import KML
 
+_REQUIRED_CSV_COLUMNS = (
+    "Type",
+    "Distance (km)",
+    "Duration",
+    "Average Pace",
+    "Average Speed (km/h)",
+    "Notes",
+    "GPX File",
+)
+
 
 def _extract_from_csv(csv_file: Path | str) -> dict[str, dict[str, str]]:
     meta_info: dict[str, dict[str, str]] = {}
 
     with open(csv_file, mode="r", encoding="utf8") as f:
-        csv_reader = csv.reader(f, delimiter=",")
-        next(csv_reader)  # Escape the header
-        for row in csv_reader:
-            gpx_filename = row[-1]
-            meta_info[gpx_filename] = {}
-            meta_info[gpx_filename]["type"] = row[2]
-            # TODO: Get units from the csv header
-            meta_info[gpx_filename]["desc"] = dedent(
-                f"""\
-                Type:       {row[2]}
-                Notes:      {row[-2]}
-                Distance:   {row[4]} km
-                Duration:   {row[5]}
-                Pace:       {row[6]} min/km
-                Speed:      {row[7]} km/h"""
+        csv_reader = csv.DictReader(f, delimiter=",")
+        if csv_reader.fieldnames is None:
+            raise ValueError("CSV file is missing header row")
+
+        missing_columns = sorted(
+            set(_REQUIRED_CSV_COLUMNS) - set(csv_reader.fieldnames)
+        )
+        if missing_columns:
+            raise ValueError(
+                f"Missing required CSV columns: {', '.join(missing_columns)}"
             )
+
+        for row_num, row in enumerate(csv_reader, start=2):
+            gpx_filename = (row.get("GPX File") or "").strip()
+            if not gpx_filename:
+                raise ValueError(f"Missing 'GPX File' in row {row_num}")
+
+            activity_type = (row.get("Type") or "").strip()
+            if not activity_type:
+                raise ValueError(f"Missing 'Type' in row {row_num}")
+
+            meta_info[gpx_filename] = {}
+            meta_info[gpx_filename]["type"] = activity_type
+            meta_info[gpx_filename]["desc"] = dedent(f"""\
+                Type:       {activity_type}
+                Notes:      {row.get('Notes', '')}
+                Distance:   {row.get('Distance (km)', '')} km
+                Duration:   {row.get('Duration', '')}
+                Pace:       {row.get('Average Pace', '')} min/km
+                Speed:      {row.get('Average Speed (km/h)', '')} km/h""")
     return meta_info
 
 
@@ -75,9 +99,10 @@ def kml_generate(
         for style_id, color, width in styles:
             kml.add_style_to_document(style_id, color, width)
         for gpx_file in gpx_sublist:
-            if filter_type and GPX(gpx_file).get_type() != filter_type:
+            gpx = GPX(gpx_file)
+            if filter_type and gpx.get_type() != filter_type:
                 continue
-            kml.add_gpx_file_to_document(gpx_file)
+            kml.add_gpx_to_document(gpx)
         kml.export()
 
 
@@ -86,8 +111,11 @@ def kml_combine(kml_combine_name: str, from_folder=r"./kml", to_folder="."):
 
     kml = KML(Path(to_folder) / f"{kml_combine_name}.kml", mode="new")
     kml.add_folder()
+    kml_files = sorted(
+        (Path(from_folder) / kml_combine_name).glob("*.kml"), key=lambda path: path.name
+    )
     for year, kml_sublist in it.groupby(
-        (Path(from_folder) / kml_combine_name).glob("*.kml"),
+        kml_files,
         key=lambda path: path.name[:4],
     ):
         print(f"Combing year {year}")
@@ -104,7 +132,8 @@ def gpx_archive_cmd():
             gpx_archive_with_zipfile(gpx_zip_file)
     elif len(args) == 1:
         filename = args[0]
-        assert Path(filename).exists(), f"The filename '{filename}' should exist!"
+        if not Path(filename).exists():
+            raise FileNotFoundError(f"The filename '{filename}' should exist!")
         print(f"*** Processing {filename} ***")
         gpx_archive_with_zipfile(filename)
     else:
