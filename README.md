@@ -12,15 +12,18 @@ I use Runkeeper to track my biking and walking activities. Tracking is a long te
 
 I export the gpx files once per month, and generate kml files from the gpx files with the format YYYY-MM.kml. After that, all the kml files are combined into a single kml file, usually named after the city or the event related with those activities.
 
-## Installation
+## Install and use
+Run the interactive command and choose tasks from a terminal menu.
+
+Without uv:
 ```commandline
 pip install gpx2kml
+gpx2kml
 ```
 
-## How to use it
-Run a single interactive command and choose tasks from a terminal menu:
+With uv (no global installation required):
 ```commandline
-gpx2kml
+uvx gpx2kml
 ```
 
 1. Accumulate a few activities using Runkeeper.
