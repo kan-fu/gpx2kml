@@ -3,6 +3,7 @@ from textwrap import dedent
 
 from gpx2kml.util import (
     _extract_from_csv,
+    gpx2kml_cmd,
     gpx_archive,
     gpx_archive_with_zipfile,
     kml_combine,
@@ -41,12 +42,53 @@ def test_extract_from_csv():
     assert _extract_from_csv("test/gpx/cardioActivities.csv") == {
         "2023-08-03-121238.gpx": {
             "type": "Walking",
-            "desc": dedent("""\
+            "desc": dedent(
+                """\
                 Type:       Walking
                 Notes:      
                 Distance:   0.68 km
                 Duration:   41:54
                 Pace:       62:04 min/km
-                Speed:      0.97 km/h"""),  # noqa: W291
+                Speed:      0.97 km/h"""
+            ),  # noqa: W291
         }
     }
+
+
+def test_gpx2kml_cmd_runs_kml_generate_with_filter(monkeypatch):
+    calls: list[str] = []
+    inputs = iter(["2", "Cycling", "q"])
+
+    monkeypatch.setattr("builtins.input", lambda _: next(inputs))
+    monkeypatch.setattr(
+        "gpx2kml.util.kml_generate", lambda filter_type=None: calls.append(filter_type)
+    )
+
+    gpx2kml_cmd()
+
+    assert calls == ["Cycling"]
+
+
+def test_gpx2kml_cmd_rejects_missing_zip_file(monkeypatch, capsys):
+    inputs = iter(["1", "not_found.zip", "q"])
+
+    monkeypatch.setattr("builtins.input", lambda _: next(inputs))
+
+    gpx2kml_cmd()
+
+    output = capsys.readouterr().out
+    assert "should exist" in output
+
+
+def test_gpx2kml_cmd_requires_kml_combine_name(monkeypatch, capsys):
+    calls: list[str] = []
+    inputs = iter(["3", "", "3", "demo", "q"])
+
+    monkeypatch.setattr("builtins.input", lambda _: next(inputs))
+    monkeypatch.setattr("gpx2kml.util.kml_combine", lambda name: calls.append(name))
+
+    gpx2kml_cmd()
+
+    output = capsys.readouterr().out
+    assert "Please input the name of the combined file!" in output
+    assert calls == ["demo"]

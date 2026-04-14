@@ -18,26 +18,16 @@ pip install gpx2kml
 ```
 
 ## How to use it
+Run a single interactive command and choose tasks from a terminal menu:
+```commandline
+gpx2kml
+```
+
 1. Accumulate a few activities using Runkeeper.
 2. [Export the acitives](https://support.runkeeper.com/hc/en-us/articles/201109886-How-to-Export-Your-Runkeeper-Data) from the Runkeeper web UI and download the file. The demo folder provides a sample zip file.
 3. Open a terminal, and change the working directory to the one that contains the zip file.
-4. Run `gpx-archive` in the terminal. This will create an *archive* folder under the working directory, with all the gpx files inside.
-```commandline
-gpx-archive
-```
-5. Run `kml-gen` in the terminal. This will create a *kml* folder under the working directory, with the generated kml files organized by month.
-```commandline
-kml-gen
-```
-
-Alternatively, kml-gen can take an argument for filtering the type of gpx files, for example to only generate kml from "Cycling" gpx files,
-```commandline
-kml-gen Cycling
-```
-6. Move the kml in the kml/XXX folder, and run `kml-combine XXX` in the terminal.
-This will create a `XXX.kml`` file that includes all the kml files in the kml/XXX folder.
-```commandline
-kml-combine XXX
-```
+4. Select menu option 1 to archive GPX files from a Runkeeper export zip. This creates an *archive* folder.
+5. Select menu option 2 to generate monthly KML files. This creates a *kml* folder with YYYY-MM.kml files.
+6. Move the kml files into kml/XXX, then select menu option 3 and input XXX to combine them into XXX.kml.
 
  Other than running the commands in the terminal, there is a demo.py that demonstrates how to call the methods in a python file. 

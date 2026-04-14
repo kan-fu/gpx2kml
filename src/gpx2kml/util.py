@@ -1,6 +1,5 @@
 import csv
 import itertools as it
-import sys
 import tempfile
 from pathlib import Path
 from textwrap import dedent
@@ -48,13 +47,15 @@ def _extract_from_csv(csv_file: Path | str) -> dict[str, dict[str, str]]:
 
             meta_info[gpx_filename] = {}
             meta_info[gpx_filename]["type"] = activity_type
-            meta_info[gpx_filename]["desc"] = dedent(f"""\
+            meta_info[gpx_filename]["desc"] = dedent(
+                f"""\
                 Type:       {activity_type}
                 Notes:      {row.get('Notes', '')}
                 Distance:   {row.get('Distance (km)', '')} km
                 Duration:   {row.get('Duration', '')}
                 Pace:       {row.get('Average Pace', '')} min/km
-                Speed:      {row.get('Average Speed (km/h)', '')} km/h""")
+                Speed:      {row.get('Average Speed (km/h)', '')} km/h"""
+            )
     return meta_info
 
 
@@ -124,38 +125,56 @@ def kml_combine(kml_combine_name: str, from_folder=r"./kml", to_folder="."):
     kml.export()
 
 
-def gpx_archive_cmd():
-    args = sys.argv[1:]
-    if len(args) == 0:  # By default, it will process all the zip files
-        for gpx_zip_file in Path(".").glob("01-runkeeper-data-export*.zip"):
-            print(f"*** Processing {gpx_zip_file} ***")
-            gpx_archive_with_zipfile(gpx_zip_file)
-    elif len(args) == 1:
-        filename = args[0]
-        if not Path(filename).exists():
-            raise FileNotFoundError(f"The filename '{filename}' should exist!")
-        print(f"*** Processing {filename} ***")
-        gpx_archive_with_zipfile(filename)
-    else:
-        print("gpx-archive only supports zero or one argument!")
+def gpx2kml_cmd():
+    """Interactive menu to run one of the supported CLI tasks."""
 
+    while True:
+        print("\n=== gpx2kml Menu ===")
+        print("1) Archive GPX files from Runkeeper zip export")
+        print("2) Generate monthly KML files")
+        print("3) Combine KML files")
+        print("q) Quit")
 
-def kml_generate_cmd():
-    args = sys.argv[1:]
-    if len(args) == 0:
-        kml_generate()
-    elif len(args) == 1:
-        filter_type = args[0]
-        kml_generate(filter_type=filter_type)
-    else:
-        print("kml-gen only supports zero or one argument!")
+        choice = input("Choose an option: ").strip().lower()
 
+        if choice == "1":
+            filename = input(
+                "Zip filename (press Enter to process all matching zip files): "
+            ).strip()
+            if filename:
+                if not Path(filename).exists():
+                    print(f"The filename '{filename}' should exist!")
+                    continue
+                print(f"*** Processing {filename} ***")
+                gpx_archive_with_zipfile(filename)
+            else:
+                zip_files = list(Path(".").glob("01-runkeeper-data-export*.zip"))
+                if not zip_files:
+                    print("No matching zip files found in current directory.")
+                    continue
+                for gpx_zip_file in zip_files:
+                    print(f"*** Processing {gpx_zip_file} ***")
+                    gpx_archive_with_zipfile(gpx_zip_file)
 
-def kml_combine_cmd():
-    args = sys.argv[1:]
-    if len(args) == 0:
-        print("Please input the name of the combined file!")
-    elif len(args) == 1:
-        kml_combine(args[0])
-    else:
-        print("kml-combine only supports one argument!")
+        elif choice == "2":
+            filter_type = input("Filter type (press Enter for all types): ").strip()
+            if filter_type:
+                kml_generate(filter_type=filter_type)
+            else:
+                kml_generate()
+
+        elif choice == "3":
+            kml_combine_name = input(
+                "Combined file name (without .kml extension): "
+            ).strip()
+            if not kml_combine_name:
+                print("Please input the name of the combined file!")
+                continue
+            kml_combine(kml_combine_name)
+
+        elif choice == "q":
+            print("Bye.")
+            return
+
+        else:
+            print("Invalid option. Please choose 1, 2, 3, or q.")
