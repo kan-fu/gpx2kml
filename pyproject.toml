@@ -23,8 +23,9 @@ classifiers = [
 
 [project.optional-dependencies]
 dev = [
-    "tox",
     "pytest",
+  "mypy",
+  "ruff",
 ]
 
 [tool.pytest.ini_options]
@@ -33,20 +34,15 @@ addopts = [
 ]
 testpaths =  "test"
 
-[tool.isort]
-profile = "black"
-src_paths = ["src", "test"]
+[tool.mypy]
+check_untyped_defs = true
 
-[tool.pylint.messages_control]
-disable = [
-  "line-too-long",
-  "missing-function-docstring",
-  "missing-module-docstring",
-  "missing-class-docstring",
-  "no-else-return",
-  "broad-except",
-  "fixme",
-]
+[tool.ruff]
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B"]
+ignore = ["E501"]
 
 
 [project.scripts]

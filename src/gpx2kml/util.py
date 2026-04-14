@@ -50,11 +50,11 @@ def _extract_from_csv(csv_file: Path | str) -> dict[str, dict[str, str]]:
             meta_info[gpx_filename]["desc"] = dedent(
                 f"""\
                 Type:       {activity_type}
-                Notes:      {row.get('Notes', '')}
-                Distance:   {row.get('Distance (km)', '')} km
-                Duration:   {row.get('Duration', '')}
-                Pace:       {row.get('Average Pace', '')} min/km
-                Speed:      {row.get('Average Speed (km/h)', '')} km/h"""
+                Notes:      {row.get("Notes", "")}
+                Distance:   {row.get("Distance (km)", "")} km
+                Duration:   {row.get("Duration", "")}
+                Pace:       {row.get("Average Pace", "")} min/km
+                Speed:      {row.get("Average Speed (km/h)", "")} km/h"""
             )
     return meta_info
 
